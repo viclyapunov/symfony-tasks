@@ -54,7 +54,7 @@ class FormController extends Controller
      */
     public function successAction()
     {
-        return new Response('<h4>task created ok.</h4>');
+        return $this->render('AppBundle::created.html.twig', array());
     }
 
     /**
