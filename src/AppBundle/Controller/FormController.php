@@ -23,7 +23,7 @@ class FormController extends Controller
         $task = new Task();
 
         $form = $this->createFormBuilder($task)
-            ->add('task', TextType::class)
+            ->add('task', TextType::class, array('label' => 'New task:'))
             ->add('dueDate', DateType::class)
             ->add('save', SubmitType::class, array('label' => 'Create Task'))
             ->getForm();
@@ -65,6 +65,39 @@ class FormController extends Controller
         $tasks = $this->GetDoctrine()->GetRepository(Task::class)->findAll();
         return $this->render('AppBundle::list.html.twig', array(
             'tasks' => $tasks
+        ));
+    }
+        /**
+     * @Route("/tasks/{task_id}", name="task_show")
+     */
+    public function showAction(Request $request, $task_id)
+    {
+
+        $task = $this->GetDoctrine()->GetRepository(Task::class)->findOneById($task_id);
+
+        $form = $this->createFormBuilder($task)
+            ->add('task', TextType::class)
+            ->add('dueDate', DateType::class)
+            ->add('save', SubmitType::class, array('label' => 'Task'))
+            ->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // $form->getData() holds the submitted values
+            // but, the original `$task` variable has also been updated
+            $task = $form->getData();
+
+            // ... perform some action, such as saving the task to the database
+            // for example, if Task is a Doctrine entity, save it!
+             $em = $this->getDoctrine()->getManager();
+             $em->persist($task);
+             $em->flush();
+
+            return $this->redirectToRoute('task_success');
+        }
+
+        return $this->render('AppBundle::show.html.twig', array(
+            'form' => $form->createView(),
         ));
     }
 }

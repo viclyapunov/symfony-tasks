@@ -12,7 +12,7 @@
     <h4>Tasks:</h4>
       <ul>
         {% for task in tasks %}
-        <li>{{ task.id }}. {{ task.task }}</li>
+        <li>{{ task.id }}. <a href="{{ path('task_show', {'task_id': task.id}) }}"> {{ task.task }} </a></li>
         {% endfor %}
       </ul>
 
