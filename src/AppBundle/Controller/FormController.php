@@ -7,10 +7,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints as Assert;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use AppBundle\Form\TaskType;
 
 class FormController extends Controller
 {
@@ -22,11 +25,7 @@ class FormController extends Controller
         // just setup a fresh $task object (remove the dummy data)
         $task = new Task();
 
-        $form = $this->createFormBuilder($task)
-            ->add('task', TextType::class, array('label' => 'New task:'))
-            ->add('dueDate', DateType::class)
-            ->add('save', SubmitType::class, array('label' => 'Create Task'))
-            ->getForm();
+        $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
@@ -67,7 +66,8 @@ class FormController extends Controller
             'tasks' => $tasks
         ));
     }
-        /**
+
+    /**
      * @Route("/tasks/{task_id}", name="task_show")
      */
     public function showAction(Request $request, $task_id)
@@ -75,11 +75,8 @@ class FormController extends Controller
 
         $task = $this->GetDoctrine()->GetRepository(Task::class)->findOneById($task_id);
 
-        $form = $this->createFormBuilder($task)
-            ->add('task', TextType::class)
-            ->add('dueDate', DateType::class)
-            ->add('save', SubmitType::class, array('label' => 'Task'))
-            ->getForm();
+        $form = $form = $this->createForm(TaskType::class, $task);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
