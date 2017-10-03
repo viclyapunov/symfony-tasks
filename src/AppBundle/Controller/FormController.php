@@ -97,4 +97,18 @@ class FormController extends Controller
             'form' => $form->createView(),
         ));
     }
+
+    /**
+     * @Route("/{task_id}/delete", name="task_delete")
+     */
+    public function deleteAction(Request $request, $task_id)
+    {
+        $task = $this->GetDoctrine()->GetRepository(Task::class)->findOneById($task_id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($task);
+        $em->flush();
+
+        return $this->redirectToRoute('task_list');
+    }
 }

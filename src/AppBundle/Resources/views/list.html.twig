@@ -18,11 +18,8 @@
 
           <tr><td>{{ task.id }}</td> <td><a href="{{ path('task_show', {'task_id': task.id}) }}"> {{ task.task }} </a></td> <td>{{ task.completed }}</td><td>{{ task.createdby }}</td>
             <td>
-
-                <a href="#"><i class="fa fa-list" aria-hidden="true"></i></a>
-                <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                <a href="#"><i class="fa fa-times" aria-hidden="true"></i></a>
-
+                <a href="{{ path('task_show', {'task_id': task.id }) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                <a href="{{ path('task_delete', {'task_id': task.id }) }}"><i class="fa fa-times" aria-hidden="true"></i></a>
               </td></tr>
           {% endfor %}
         </tbody>
